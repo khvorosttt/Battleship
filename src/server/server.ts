@@ -4,6 +4,7 @@ import { IWebsocket, WS_COMMAND } from '../types/types';
 import { handlePlayerReg } from '../handlers/handlePlayerReg';
 import { randomUUID } from 'crypto';
 import { handleCreateRoom, handleUpdateRooms } from '../handlers/handleCreateRoom';
+import { handleAddPlayerToRoom } from '../handlers/handleAddPlayerToRoom';
 
 export const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
 const startWS = () => {
@@ -23,6 +24,10 @@ const startWS = () => {
                 case WS_COMMAND.CREATE_ROOM:
                     console.log('create room');
                     handleCreateRoom(ws);
+                    break;
+                case WS_COMMAND.ADD_USER_TO_ROOM:
+                    console.log('add user to room');
+                    handleAddPlayerToRoom(ws, info.data);
             }
             console.log(JSON.parse(msg.toString()));
         });

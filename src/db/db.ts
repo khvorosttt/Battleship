@@ -34,8 +34,27 @@ const findPlayerBySocket = (wsId: string) => {
     return DB.players.find((player) => player.socket.id === wsId);
 };
 
+const findPlayerById = (id: string) => {
+    return DB.players.find((player) => player.index === id);
+};
+
 const availableRooms = (index: string) => {
     return DB.rooms.filter((room) => !room.roomUsers.some((player) => player.index === index));
 };
 
-export { IDB, IPlayer, DB, addPlayer, IRoom, addRoom, findPlayerBySocket, availableRooms };
+const findIndexRoomById = (roomId: string) => {
+    return DB.rooms.findIndex((room) => room.roomId === roomId);
+};
+
+export {
+    IDB,
+    IPlayer,
+    DB,
+    addPlayer,
+    IRoom,
+    addRoom,
+    findPlayerBySocket,
+    availableRooms,
+    findIndexRoomById,
+    findPlayerById,
+};

@@ -18,6 +18,11 @@ interface IWebsocket extends WebSocket {
     playerName: string;
 }
 
+interface IGamePlayer {
+    idGame: string;
+    idPlayer: string;
+}
+
 enum WS_COMMAND {
     REGISTRATION = 'reg',
     CREATE_ROOM = 'create_room',
@@ -26,4 +31,4 @@ enum WS_COMMAND {
     CREATE_GAME = 'create_game',
 }
 
-export { WS_COMMAND, IRegResponce, IRegDataResponce, IWebsocket };
+export { WS_COMMAND, IRegResponce, IRegDataResponce, IWebsocket, IGamePlayer };
