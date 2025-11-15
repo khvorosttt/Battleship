@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import { WebSocketServer } from 'ws';
+import { WS_COMMAND } from '../types/types';
+import { handlePlayerReg } from '../handlers/handlePlayerReg';
 
 const startWS = () => {
     const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
@@ -7,11 +9,15 @@ const startWS = () => {
     wss.on('connection', function connection(ws) {
         console.log('ws connected');
 
-        ws.on('message', (data) => {
-            console.log(data.toString());
+        ws.on('message', (msg) => {
+            const info = JSON.parse(msg.toString());
+            const type = info.type;
+            switch (type) {
+                case WS_COMMAND.REGISTRATION:
+                    console.log('registr');
+                    handlePlayerReg(ws, JSON.parse(info.data));
+            }
         });
-
-        ws.send('sended msg');
 
         ws.on('error', console.error);
     });
