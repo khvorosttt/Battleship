@@ -1,3 +1,5 @@
+import WebSocket from 'ws';
+
 interface IRegResponce {
     type: string;
     data: string;
@@ -11,8 +13,17 @@ interface IRegDataResponce {
     errorText: string;
 }
 
-enum WS_COMMAND {
-    REGISTRATION = 'reg',
+interface IWebsocket extends WebSocket {
+    id: string;
+    playerName: string;
 }
 
-export { WS_COMMAND, IRegResponce, IRegDataResponce };
+enum WS_COMMAND {
+    REGISTRATION = 'reg',
+    CREATE_ROOM = 'create_room',
+    UPDATE_ROOM = 'update_room',
+    ADD_USER_TO_ROOM = 'add_user_to_room',
+    CREATE_GAME = 'create_game',
+}
+
+export { WS_COMMAND, IRegResponce, IRegDataResponce, IWebsocket };

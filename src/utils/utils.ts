@@ -1,18 +1,23 @@
 import { randomUUID } from 'crypto';
 import { addPlayer, DB, IPlayer } from '../db/db';
+import { IWebsocket } from '../types/types';
 
 interface IVerifyOrCreatePlayerReturn {
     error: boolean;
-    id?: string;
+    index?: string;
     errorMSG?: string;
 }
 
-const verifyOrCreatePlayer = (data: Omit<IPlayer, 'id' | 'wins'>): IVerifyOrCreatePlayerReturn => {
+const verifyOrCreatePlayer = (
+    ws: IWebsocket,
+    data: Omit<IPlayer, 'index' | 'wins' | 'ws'>,
+): IVerifyOrCreatePlayerReturn => {
     const existedPlayer = DB.players.find((player) => player.name === data.name);
     if (existedPlayer) {
         if (existedPlayer.password === data.password) {
+            ws.playerName = data.name;
             return {
-                id: existedPlayer.id,
+                index: existedPlayer.index,
                 error: false,
             };
         } else {
@@ -22,14 +27,16 @@ const verifyOrCreatePlayer = (data: Omit<IPlayer, 'id' | 'wins'>): IVerifyOrCrea
             };
         }
     } else {
+        ws.playerName = data.name;
         const newPlayer = {
-            id: randomUUID(),
+            index: randomUUID(),
             ...data,
             wins: 0,
+            socket: ws,
         };
         addPlayer(newPlayer);
         return {
-            id: newPlayer.id,
+            index: newPlayer.index,
             error: false,
         };
     }

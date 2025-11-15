@@ -1,13 +1,12 @@
-import { WebSocket } from 'ws';
 import { IPlayer } from '../db/db';
-import { IRegResponce, WS_COMMAND } from '../types/types';
+import { IRegResponce, IWebsocket, WS_COMMAND } from '../types/types';
 import { IVerifyOrCreatePlayerReturn, verifyOrCreatePlayer } from '../utils/utils';
 
-const handlePlayerReg = (ws: WebSocket, player: Omit<IPlayer, 'id' | 'wins'>) => {
-    const result: IVerifyOrCreatePlayerReturn = verifyOrCreatePlayer(player);
+const handlePlayerReg = (ws: IWebsocket, player: Omit<IPlayer, 'index' | 'wins' | 'ws'>) => {
+    const result: IVerifyOrCreatePlayerReturn = verifyOrCreatePlayer(ws, player);
     const dataJSON = JSON.stringify({
         name: player.name || '',
-        index: result.id || '',
+        index: result.index || '',
         error: result.error,
         errorText: result.errorMSG || '',
     });

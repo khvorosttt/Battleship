@@ -1,13 +1,15 @@
 import 'dotenv/config';
 import { WebSocketServer } from 'ws';
-import { WS_COMMAND } from '../types/types';
+import { IWebsocket, WS_COMMAND } from '../types/types';
 import { handlePlayerReg } from '../handlers/handlePlayerReg';
+import { randomUUID } from 'crypto';
+import { handleCreateRoom, handleUpdateRooms } from '../handlers/handleCreateRoom';
 
+export const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
 const startWS = () => {
-    const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
-
-    wss.on('connection', function connection(ws) {
+    wss.on('connection', function connection(ws: IWebsocket) {
         console.log('ws connected');
+        ws.id = randomUUID();
 
         ws.on('message', (msg) => {
             const info = JSON.parse(msg.toString());
@@ -16,7 +18,13 @@ const startWS = () => {
                 case WS_COMMAND.REGISTRATION:
                     console.log('registr');
                     handlePlayerReg(ws, JSON.parse(info.data));
+                    handleUpdateRooms(ws);
+                    break;
+                case WS_COMMAND.CREATE_ROOM:
+                    console.log('create room');
+                    handleCreateRoom(ws);
             }
+            console.log(JSON.parse(msg.toString()));
         });
 
         ws.on('error', console.error);
@@ -26,6 +34,8 @@ const startWS = () => {
         console.log('WebSocket starting');
         console.log('Waiting...');
     });
+
+    return wss;
 };
 
 export { startWS };
