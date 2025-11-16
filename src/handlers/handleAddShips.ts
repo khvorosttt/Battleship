@@ -1,5 +1,6 @@
 import { DB } from '../db/db';
 import { IGamePlayerData, IWebsocket, ShipWithoutHits, WS_COMMAND } from '../types/types';
+import { sendTurn } from './sendTurn';
 
 const handleAddShips = (ws: IWebsocket, data: string) => {
     const gameInfo: Omit<IGamePlayerData, 'attackedCells'> = JSON.parse(data);
@@ -16,6 +17,7 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
         });
         if (DB.games[currentGameSessionIndex].players.length === 2) {
             console.log('game start');
+            DB.games[currentGameSessionIndex].currentPlayerId = gameInfo.indexPlayer;
             handleStartGame(gameInfo);
         }
     } else {
@@ -27,6 +29,7 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
                     attackedCells: [],
                 },
             ],
+            currentPlayerId: undefined,
         });
     }
 };
@@ -52,6 +55,7 @@ const handleStartGame = (gameInfo: Omit<IGamePlayerData, 'attackedCells'>) => {
         };
         player.socket.send(JSON.stringify(response));
     });
+    sendTurn(game, game.players[1].indexPlayer);
 };
 
 export { handleAddShips };

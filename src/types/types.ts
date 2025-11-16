@@ -32,6 +32,7 @@ enum WS_COMMAND {
     ADD_SHIPS = 'add_ships',
     START_GAME = 'start_game',
     ATTACK = 'attack',
+    TURN = 'turn',
 }
 
 type shipType = 'small' | 'medium' | 'large' | 'huge';
@@ -64,6 +65,7 @@ interface IGamePlayerData {
 interface IGameSession {
     gameId: string;
     players: IGamePlayerData[];
+    currentPlayerId: string | undefined;
 }
 
 interface IAttackReq {

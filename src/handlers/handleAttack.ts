@@ -8,6 +8,7 @@ import {
     IPosition,
     IShip,
 } from '../types/types';
+import { sendTurn } from './sendTurn';
 
 const handleAttack = (data: string) => {
     const info: IAttackReq = JSON.parse(data);
@@ -17,6 +18,7 @@ const handleAttack = (data: string) => {
     const attackPlayer = game.players.find((player) => player.indexPlayer === info.indexPlayer);
     const enemy = game.players.find((player) => player.indexPlayer !== info.indexPlayer);
     if (!attackPlayer || !enemy) return;
+    if (game.currentPlayerId !== attackPlayer.indexPlayer) return;
 
     const alreadyAttacked = attackPlayer.attackedCells.some(
         (cell) => cell.x === info.x && cell.y === info.y,
@@ -54,6 +56,10 @@ const handleAttack = (data: string) => {
         }
     }
     sendAttackRes(attackPlayer, enemy, status, { x: info.x, y: info.y });
+    if (status === 'miss') {
+        sendTurn(game, enemy.indexPlayer);
+        game.currentPlayerId = enemy.indexPlayer;
+    }
     if (killedShip) {
         const missCells = getAroundCells(killedShip);
         missCells.forEach((cell) => {
