@@ -48,6 +48,10 @@ const findIndexRoomById = (roomId: string) => {
     return DB.rooms.findIndex((room) => room.roomId === roomId);
 };
 
+const findGameById = (id: string) => {
+    return DB.games.find((g) => g.gameId === id);
+};
+
 export {
     IDB,
     IPlayer,
@@ -59,4 +63,5 @@ export {
     availableRooms,
     findIndexRoomById,
     findPlayerById,
+    findGameById,
 };

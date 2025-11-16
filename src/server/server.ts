@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto';
 import { handleCreateRoom, handleUpdateRooms } from '../handlers/handleCreateRoom';
 import { handleAddPlayerToRoom } from '../handlers/handleAddPlayerToRoom';
 import { handleAddShips } from '../handlers/handleAddShips';
+import { handleAttack } from '../handlers/handleAttack';
 
 export const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
 const startWS = () => {
@@ -33,6 +34,11 @@ const startWS = () => {
                 case WS_COMMAND.ADD_SHIPS:
                     console.log('add ships');
                     handleAddShips(ws, info.data);
+                    break;
+                case WS_COMMAND.ATTACK:
+                    console.log('attack');
+                    console.log(info.data);
+                    handleAttack(info.data);
                     break;
             }
             console.log(JSON.parse(msg.toString()));

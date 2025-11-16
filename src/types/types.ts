@@ -31,20 +31,26 @@ enum WS_COMMAND {
     CREATE_GAME = 'create_game',
     ADD_SHIPS = 'add_ships',
     START_GAME = 'start_game',
+    ATTACK = 'attack',
 }
 
 type shipType = 'small' | 'medium' | 'large' | 'huge';
+
+type shipStatus = 'miss' | 'killed' | 'shot';
 
 interface IPosition {
     x: number;
     y: number;
 }
 
+type ShipWithoutHits = Omit<IShip, 'hits'>;
+
 interface IShip {
     position: IPosition;
     direction: boolean;
     length: number;
     type: shipType;
+    hits: number;
 }
 
 interface IGamePlayerData {
@@ -52,11 +58,25 @@ interface IGamePlayerData {
     ships: IShip[];
     indexPlayer: string;
     socket: IWebsocket;
+    attackedCells: IPosition[];
 }
 
 interface IGameSession {
     gameId: string;
     players: IGamePlayerData[];
+}
+
+interface IAttackReq {
+    gameId: string;
+    x: number;
+    y: number;
+    indexPlayer: string;
+}
+
+interface IAttackResData {
+    position: IPosition;
+    currentPlayer: string;
+    status: shipStatus;
 }
 
 export {
@@ -69,4 +89,9 @@ export {
     IShip,
     IGameSession,
     IGamePlayerData,
+    IAttackReq,
+    ShipWithoutHits,
+    shipStatus,
+    IAttackResData,
+    IPosition,
 };

@@ -1,13 +1,19 @@
 import { DB } from '../db/db';
-import { IGamePlayerData, IWebsocket, WS_COMMAND } from '../types/types';
+import { IGamePlayerData, IWebsocket, ShipWithoutHits, WS_COMMAND } from '../types/types';
 
 const handleAddShips = (ws: IWebsocket, data: string) => {
-    const gameInfo: IGamePlayerData = JSON.parse(data);
+    const gameInfo: Omit<IGamePlayerData, 'attackedCells'> = JSON.parse(data);
     gameInfo.socket = ws;
+    gameInfo.ships.forEach((ship) => {
+        ship.hits = 0;
+    });
     console.log(gameInfo);
     const currentGameSessionIndex = DB.games.findIndex((game) => game.gameId === gameInfo.gameId);
     if (currentGameSessionIndex !== -1 && DB.games[currentGameSessionIndex].players.length < 2) {
-        DB.games[currentGameSessionIndex].players.push(gameInfo);
+        DB.games[currentGameSessionIndex].players.push({
+            ...gameInfo,
+            attackedCells: [],
+        });
         if (DB.games[currentGameSessionIndex].players.length === 2) {
             console.log('game start');
             handleStartGame(gameInfo);
@@ -15,17 +21,28 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
     } else {
         DB.games.push({
             gameId: gameInfo.gameId,
-            players: [gameInfo],
+            players: [
+                {
+                    ...gameInfo,
+                    attackedCells: [],
+                },
+            ],
         });
     }
 };
 
-const handleStartGame = (gameInfo: IGamePlayerData) => {
+const handleStartGame = (gameInfo: Omit<IGamePlayerData, 'attackedCells'>) => {
     const game = DB.games.find((g) => g.gameId === gameInfo.gameId);
     if (!game) return;
     game.players.forEach((player) => {
+        const shipsWithoutHits: ShipWithoutHits[] = player.ships.map((ship) => ({
+            position: ship.position,
+            direction: ship.direction,
+            type: ship.type,
+            length: ship.length,
+        }));
         const responseData = {
-            ships: player.ships,
+            ships: shipsWithoutHits,
             currentPlayerIndex: gameInfo.indexPlayer,
         };
         const response = {
