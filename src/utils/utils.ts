@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
-import { addPlayer, DB, IPlayer } from '../db/db';
-import { IShip, IWebsocket } from '../types/types';
+import { addPlayer, DB, findPlayerBySocket, IPlayer, selectWinsInfo } from '../db/db';
+import { IGamePlayerData, IShip, IWebsocket, WS_COMMAND } from '../types/types';
+import { wss } from '../server/server';
 
 interface IVerifyOrCreatePlayerReturn {
     error: boolean;
@@ -53,4 +54,25 @@ const isFinish = (ships: IShip[]) => {
     return ships.every((ship) => ship.hits === ship.length);
 };
 
-export { verifyOrCreatePlayer, IVerifyOrCreatePlayerReturn, generateFreeCells, isFinish };
+const updateWinners = (player: IGamePlayerData) => {
+    const playerGlobal = findPlayerBySocket(player.socket.id);
+    if (!playerGlobal) return;
+    playerGlobal.wins++;
+    const winsInfo = selectWinsInfo();
+    const response = {
+        type: WS_COMMAND.UPDATE_WINNERS,
+        data: JSON.stringify(winsInfo),
+        id: 0,
+    };
+    wss.clients.forEach((client) => {
+        client.send(JSON.stringify(response));
+    });
+};
+
+export {
+    verifyOrCreatePlayer,
+    IVerifyOrCreatePlayerReturn,
+    generateFreeCells,
+    isFinish,
+    updateWinners,
+};

@@ -35,6 +35,7 @@ enum WS_COMMAND {
     TURN = 'turn',
     RANDOM_ATTACK = 'randomAttack',
     FINISH = 'finish',
+    UPDATE_WINNERS = 'update_winners',
 }
 
 type shipType = 'small' | 'medium' | 'large' | 'huge';

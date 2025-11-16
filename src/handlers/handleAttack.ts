@@ -8,7 +8,7 @@ import {
     IPosition,
     IShip,
 } from '../types/types';
-import { isFinish } from '../utils/utils';
+import { isFinish, updateWinners } from '../utils/utils';
 import { sendTurn } from './sendTurn';
 
 const handleAttack = (data: string) => {
@@ -77,6 +77,7 @@ const handleAttack = (data: string) => {
             console.log(response);
             attackPlayer.socket.send(JSON.stringify(response));
             enemy.socket.send(JSON.stringify(response));
+            updateWinners(attackPlayer);
         }
     }
 };

@@ -52,6 +52,15 @@ const findGameById = (id: string) => {
     return DB.games.find((g) => g.gameId === id);
 };
 
+const selectWinsInfo = () => {
+    return DB.players.map((player) => {
+        return {
+            name: player.name,
+            wins: player.wins,
+        };
+    });
+};
+
 export {
     IDB,
     IPlayer,
@@ -64,4 +73,5 @@ export {
     findIndexRoomById,
     findPlayerById,
     findGameById,
+    selectWinsInfo,
 };
