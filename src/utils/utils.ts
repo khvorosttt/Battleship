@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { addPlayer, DB, IPlayer } from '../db/db';
-import { IWebsocket } from '../types/types';
+import { IShip, IWebsocket } from '../types/types';
 
 interface IVerifyOrCreatePlayerReturn {
     error: boolean;
@@ -49,4 +49,8 @@ const generateFreeCells = () => {
     }));
 };
 
-export { verifyOrCreatePlayer, IVerifyOrCreatePlayerReturn, generateFreeCells };
+const isFinish = (ships: IShip[]) => {
+    return ships.every((ship) => ship.hits === ship.length);
+};
+
+export { verifyOrCreatePlayer, IVerifyOrCreatePlayerReturn, generateFreeCells, isFinish };

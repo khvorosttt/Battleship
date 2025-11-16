@@ -34,6 +34,7 @@ enum WS_COMMAND {
     ATTACK = 'attack',
     TURN = 'turn',
     RANDOM_ATTACK = 'randomAttack',
+    FINISH = 'finish',
 }
 
 type shipType = 'small' | 'medium' | 'large' | 'huge';

@@ -8,6 +8,7 @@ import {
     IPosition,
     IShip,
 } from '../types/types';
+import { isFinish } from '../utils/utils';
 import { sendTurn } from './sendTurn';
 
 const handleAttack = (data: string) => {
@@ -65,6 +66,18 @@ const handleAttack = (data: string) => {
         missCells.forEach((cell) => {
             sendAttackRes(attackPlayer, enemy, 'miss', cell);
         });
+        if (isFinish(enemy.ships)) {
+            const response = {
+                type: WS_COMMAND.FINISH,
+                data: JSON.stringify({
+                    winPlayer: attackPlayer.indexPlayer,
+                }),
+                id: 0,
+            };
+            console.log(response);
+            attackPlayer.socket.send(JSON.stringify(response));
+            enemy.socket.send(JSON.stringify(response));
+        }
     }
 };
 
