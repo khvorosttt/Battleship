@@ -1,5 +1,6 @@
 import { DB } from '../db/db';
 import { IGamePlayerData, IWebsocket, ShipWithoutHits, WS_COMMAND } from '../types/types';
+import { generateFreeCells } from '../utils/utils';
 import { sendTurn } from './sendTurn';
 
 const handleAddShips = (ws: IWebsocket, data: string) => {
@@ -14,6 +15,7 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
         DB.games[currentGameSessionIndex].players.push({
             ...gameInfo,
             attackedCells: [],
+            freeCells: generateFreeCells(),
         });
         if (DB.games[currentGameSessionIndex].players.length === 2) {
             console.log('game start');
@@ -27,6 +29,7 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
                 {
                     ...gameInfo,
                     attackedCells: [],
+                    freeCells: generateFreeCells(),
                 },
             ],
             currentPlayerId: undefined,
@@ -34,7 +37,7 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
     }
 };
 
-const handleStartGame = (gameInfo: Omit<IGamePlayerData, 'attackedCells'>) => {
+const handleStartGame = (gameInfo: Omit<IGamePlayerData, 'attackedCells' | 'freeCells'>) => {
     const game = DB.games.find((g) => g.gameId === gameInfo.gameId);
     if (!game) return;
     game.players.forEach((player) => {

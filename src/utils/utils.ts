@@ -42,4 +42,11 @@ const verifyOrCreatePlayer = (
     }
 };
 
-export { verifyOrCreatePlayer, IVerifyOrCreatePlayerReturn };
+const generateFreeCells = () => {
+    return Array.from({ length: 100 }, (_, i) => ({
+        x: i % 10,
+        y: Math.floor(i / 10),
+    }));
+};
+
+export { verifyOrCreatePlayer, IVerifyOrCreatePlayerReturn, generateFreeCells };

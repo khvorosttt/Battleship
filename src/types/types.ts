@@ -33,6 +33,7 @@ enum WS_COMMAND {
     START_GAME = 'start_game',
     ATTACK = 'attack',
     TURN = 'turn',
+    RANDOM_ATTACK = 'randomAttack',
 }
 
 type shipType = 'small' | 'medium' | 'large' | 'huge';
@@ -60,6 +61,7 @@ interface IGamePlayerData {
     indexPlayer: string;
     socket: IWebsocket;
     attackedCells: IPosition[];
+    freeCells: IPosition[];
 }
 
 interface IGameSession {

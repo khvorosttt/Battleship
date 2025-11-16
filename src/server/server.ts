@@ -7,6 +7,7 @@ import { handleCreateRoom, handleUpdateRooms } from '../handlers/handleCreateRoo
 import { handleAddPlayerToRoom } from '../handlers/handleAddPlayerToRoom';
 import { handleAddShips } from '../handlers/handleAddShips';
 import { handleAttack } from '../handlers/handleAttack';
+import { handleRandomAttack } from '../handlers/handleRandomAttack';
 
 export const wss = new WebSocketServer({ port: Number(process.env.WS_PORT || '3000') });
 const startWS = () => {
@@ -39,6 +40,10 @@ const startWS = () => {
                     console.log('attack');
                     console.log(info.data);
                     handleAttack(info.data);
+                    break;
+                case WS_COMMAND.RANDOM_ATTACK:
+                    console.log('random attack');
+                    handleRandomAttack(info.data);
                     break;
             }
             console.log(JSON.parse(msg.toString()));
