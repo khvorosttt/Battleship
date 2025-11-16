@@ -9,7 +9,6 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
     gameInfo.ships.forEach((ship) => {
         ship.hits = 0;
     });
-    console.log(gameInfo);
     const currentGameSessionIndex = DB.games.findIndex((game) => game.gameId === gameInfo.gameId);
     if (currentGameSessionIndex !== -1 && DB.games[currentGameSessionIndex].players.length < 2) {
         DB.games[currentGameSessionIndex].players.push({
@@ -18,7 +17,6 @@ const handleAddShips = (ws: IWebsocket, data: string) => {
             freeCells: generateFreeCells(),
         });
         if (DB.games[currentGameSessionIndex].players.length === 2) {
-            console.log('game start');
             DB.games[currentGameSessionIndex].currentPlayerId = gameInfo.indexPlayer;
             handleStartGame(gameInfo);
         }

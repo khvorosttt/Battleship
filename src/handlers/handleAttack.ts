@@ -74,7 +74,6 @@ const handleAttack = (data: string) => {
                 }),
                 id: 0,
             };
-            console.log(response);
             attackPlayer.socket.send(JSON.stringify(response));
             enemy.socket.send(JSON.stringify(response));
             updateWinners(attackPlayer);

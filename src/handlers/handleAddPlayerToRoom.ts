@@ -5,7 +5,6 @@ import { IGamePlayer, IWebsocket, WS_COMMAND } from '../types/types';
 import { handleUpdateRooms } from './handleCreateRoom';
 
 const handleAddPlayerToRoom = (ws: IWebsocket, data: string) => {
-    console.log(data);
     const info = JSON.parse(data);
     const currentUser = findPlayerBySocket(ws.id);
     const selectedRoomIndex = findIndexRoomById(info.indexRoom);

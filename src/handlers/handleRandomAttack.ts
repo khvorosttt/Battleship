@@ -14,7 +14,6 @@ const handleRandomAttack = (data: string) => {
     const randIndex = Math.floor(Math.random() * attackPlayer.freeCells.length);
     const position: IPosition = attackPlayer.freeCells[randIndex];
     attackPlayer.freeCells.splice(randIndex, 1);
-    console.log(position);
     const response: IAttackReq = {
         gameId: game.gameId,
         x: position.x,

@@ -20,33 +20,25 @@ const startWS = () => {
             const type = info.type;
             switch (type) {
                 case WS_COMMAND.REGISTRATION:
-                    console.log('registr');
                     handlePlayerReg(ws, JSON.parse(info.data));
                     handleUpdateRooms(ws);
                     break;
                 case WS_COMMAND.CREATE_ROOM:
-                    console.log('create room');
                     handleCreateRoom(ws);
                     break;
                 case WS_COMMAND.ADD_USER_TO_ROOM:
-                    console.log('add user to room');
                     handleAddPlayerToRoom(ws, info.data);
                     break;
                 case WS_COMMAND.ADD_SHIPS:
-                    console.log('add ships');
                     handleAddShips(ws, info.data);
                     break;
                 case WS_COMMAND.ATTACK:
-                    console.log('attack');
-                    console.log(info.data);
                     handleAttack(info.data);
                     break;
                 case WS_COMMAND.RANDOM_ATTACK:
-                    console.log('random attack');
                     handleRandomAttack(info.data);
                     break;
             }
-            console.log(JSON.parse(msg.toString()));
         });
 
         ws.on('error', console.error);
