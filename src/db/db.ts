@@ -1,7 +1,8 @@
-import { IWebsocket } from '../types/types';
+import { IGameSession, IWebsocket } from '../types/types';
 interface IDB {
     players: IPlayer[];
     rooms: IRoom[];
+    games: IGameSession[];
 }
 
 interface IPlayer {
@@ -20,6 +21,7 @@ interface IRoom {
 const DB: IDB = {
     players: [],
     rooms: [],
+    games: [],
 };
 
 const addPlayer = (player: IPlayer) => {
